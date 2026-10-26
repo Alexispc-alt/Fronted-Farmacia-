@@ -1,0 +1,56 @@
+<div class="dashboard-container">
+  <div class="accessibility-bar">
+    <span>⌨️ Atajos: <kbd>Alt + D</kbd> Tema | Accesibilidad:</span>
+    <div class="accessibility-controls">
+      <button type="button" (click)="alternarTamanioLetra()" class="accessibility-btn">{{ fontSizeLarge ? 'A- Normal' : 'A+ Grande' }}</button>
+      <button type="button" (click)="toggleTheme()" class="theme-toggle-btn">{{ isDarkMode ? '☀️ Modo Claro' : '🌙 Modo Oscuro' }}</button>
+    </div>
+  </div>
+
+  <header class="card-box header-panel">
+    <div>
+      <h2>Panel de Médico - Agenda y Atención</h2>
+      <p class="subtitle">Gestión clínica, control de pacientes y estado de citas</p>
+    </div>
+    <button type="button" (click)="cerrarSesion()" class="btn-action btn-danger">Cerrar Sesión</button>
+  </header>
+
+  <div *ngIf="errorMessage" class="alert alert-error">{{ errorMessage }}</div>
+  <div *ngIf="successMessage" class="alert alert-success">{{ successMessage }}</div>
+
+  <section class="card-box">
+    <div class="search-filter-wrapper">
+      <input type="text" [(ngModel)]="filtroMedico" placeholder="🔍 Buscar por nombre de paciente..." class="search-input">
+      <select [(ngModel)]="filtroEstado" class="filter-select">
+        <option value="TODOS">Todos los Estados</option>
+        <option value="PROGRAMADA">Pendientes / Programadas</option>
+        <option value="COMPLETADA">Completadas</option>
+        <option value="CANCELADA">Canceladas</option>
+      </select>
+    </div>
+
+    <h3 class="section-title">Agenda de Citas Asignadas</h3>
+    
+    <div class="table-responsive">
+      <table class="table-custom">
+        <thead>
+          <tr><th>ID Cita</th><th>Fecha y Hora</th><th>Estado</th><th>Paciente</th><th>Acción</th></tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let cita of citasFiltradas">
+            <td><strong>#{{ cita.id }}</strong></td>
+            <td>{{ cita.fechaHora || cita.fecha }}</td>
+            <td><span class="badge-aprobada">{{ cita.estado }}</span></td>
+            <td>{{ cita.pacienteNombre || ('ID: ' + cita.pacienteId) }}</td>
+            <td>
+              <button type="button" (click)="atenderCita(cita.id)" class="btn-action btn-success">Completar Atención</button>
+            </td>
+          </tr>
+          <tr *ngIf="citasFiltradas.length === 0">
+            <td colspan="5" class="text-center">No hay citas médicas registradas.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>

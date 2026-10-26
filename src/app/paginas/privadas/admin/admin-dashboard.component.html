@@ -1,0 +1,176 @@
+<div class="dashboard-container">
+  <!-- Barra Superior Unificada -->
+  <div class="accessibility-bar">
+    <div class="shortcuts-info">
+      <span>{{ tr('shortcuts') }}</span>
+    </div>
+    
+    <div class="accessibility-controls">
+      <!-- Botón de Idioma ES / EN -->
+      <button type="button" (click)="toggleIdioma()" class="accessibility-btn-small" style="background: #7c3aed;" title="Cambiar idioma">
+        🌐 {{ idiomaActual === 'es' ? '🇪🇸 Español' : '🇺🇸 English' }}
+      </button>
+
+      <!-- Control por Voz -->
+      <div class="voice-control-container">
+        <button type="button" (click)="toggleEscuchaVoz()" [ngClass]="{'listening-active': escuchandoVoz}" class="voice-btn">
+          {{ escuchandoVoz ? tr('listening') : tr('voiceBtn') }}
+        </button>
+      </div>
+
+      <!-- Control de Tamaño de Texto con Botón Restablecer (100%) -->
+      <div class="font-slider-container">
+        <span class="font-label">Text ({{ fontSizePercent }}%):</span>
+        <button type="button" (click)="disminuirFuente()" class="accessibility-btn-small">A-</button>
+        <input type="range" min="80" max="140" step="5" [value]="fontSizePercent" (input)="cambiarTamanioRango($any($event.target).value)" class="font-range-slider">
+        <button type="button" (click)="aumentarFuente()" class="accessibility-btn-small">A+</button>
+        <button type="button" (click)="resetFuente()" class="accessibility-btn-small" style="background: #64748b;" title="Restablecer tamaño">100%</button>
+      </div>
+
+      <!-- Modo Oscuro / Claro -->
+      <button type="button" (click)="toggleTheme()" class="theme-toggle-btn">
+        {{ isDarkMode ? '☀️ Claro' : '🌙 Oscuro' }}
+      </button>
+    </div>
+  </div>
+
+  <header class="card-box header-panel">
+    <div>
+      <h2>{{ tr('title') }}</h2>
+      <p class="subtitle">{{ tr('subtitle') }}</p>
+    </div>
+    <button type="button" (click)="cerrarSesion()" class="btn-action btn-danger">{{ tr('logout') }}</button>
+  </header>
+
+  <!-- Tarjetas Estadísticas con Valores Reales -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon">🩺</div>
+      <div>
+        <h4>{{ tr('medicos') }}</h4>
+        <p class="stat-number">{{ totalMedicos }}</p>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">🧑‍🤝‍🧑</div>
+      <div>
+        <h4>{{ tr('pacientes') }}</h4>
+        <p class="stat-number">{{ totalPacientes }}</p>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">📋</div>
+      <div>
+        <h4>{{ tr('recepcion') }}</h4>
+        <p class="stat-number">{{ totalRecepcion }}</p>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">🛡️</div>
+      <div>
+        <h4>{{ tr('admins') }}</h4>
+        <p class="stat-number">{{ totalAdmins }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pestañas de Navegación -->
+  <nav class="tabs-container">
+    <button type="button" (click)="cambiarVista('pendientes')" [ngClass]="{'tab-active': vistaActual === 'pendientes'}" class="tab-btn">
+      {{ tr('tabPendientes') }} ({{ usuariosPendientesFiltrados.length }})
+    </button>
+    <button type="button" (click)="cambiarVista('todos')" [ngClass]="{'tab-active': vistaActual === 'todos'}" class="tab-btn">
+      {{ tr('tabGlobal') }} ({{ todosLosUsuarios.length }})
+    </button>
+  </nav>
+
+  <div *ngIf="errorMessage" class="alert alert-error" role="alert">{{ errorMessage }}</div>
+  <div *ngIf="successMessage" class="alert alert-success" role="alert">{{ successMessage }}</div>
+
+  <!-- VISTA 1: PENDIENTES -->
+  <section *ngIf="vistaActual === 'pendientes'" class="card-box animate-fade-in">
+    <div class="search-box-container">
+      <input type="text" [(ngModel)]="filtroTextoPendientes" [placeholder]="tr('searchPendientes')" class="search-input">
+    </div>
+    <div class="table-responsive">
+      <table class="table-custom">
+        <thead>
+          <tr>
+            <th>{{ tr('thId') }}</th>
+            <th>{{ tr('thNombre') }}</th>
+            <th>{{ tr('thEmail') }}</th>
+            <th>{{ tr('thRol') }}</th>
+            <th>{{ tr('thEstado') }}</th>
+            <th>{{ tr('thAcciones') }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let u of usuariosPendientesFiltrados">
+            <td><strong>#{{ u.id }}</strong></td>
+            <td>{{ u.nombre }} {{ u.apellido }}</td>
+            <td>{{ u.email }}</td>
+            <td>{{ u.rol }}</td>
+            <td><span class="badge-pendiente">{{ u.estado }}</span></td>
+            <td>
+              <div class="action-buttons">
+                <button type="button" (click)="aprobarUsuario(u.id)" class="btn-action btn-success">{{ tr('aprobar') }}</button>
+                <button type="button" (click)="rechazarUsuario(u.id)" class="btn-action btn-danger">{{ tr('rechazar') }}</button>
+              </div>
+            </td>
+          </tr>
+          <tr *ngIf="usuariosPendientesFiltrados.length === 0">
+            <td colspan="6" class="text-center">{{ tr('noPendientes') }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- VISTA 2: GESTIÓN GLOBAL -->
+  <section *ngIf="vistaActual === 'todos'" class="card-box animate-fade-in">
+    <div class="search-box-container">
+      <input type="text" [(ngModel)]="filtroTexto" [placeholder]="tr('searchGlobal')" class="search-input">
+    </div>
+    <div class="table-responsive">
+      <table class="table-custom">
+        <thead>
+          <tr>
+            <th>{{ tr('thId') }}</th>
+            <th>{{ tr('thNombreCompleto') }}</th>
+            <th>{{ tr('thEmail') }}</th>
+            <th>{{ tr('thEstado') }}</th>
+            <th>{{ tr('thRol') }}</th>
+            <th>{{ tr('thAccionEstado') }}</th>
+            <th>{{ tr('thModificarRol') }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let u of todosLosUsuariosFiltrados">
+            <td><strong>#{{ u.id }}</strong></td>
+            <td>{{ u.nombre }} {{ u.apellido }}</td>
+            <td>{{ u.email }}</td>
+            <td><span [ngClass]="{'badge-aprobada': u.estado === 'APROBADA', 'badge-pendiente': u.estado === 'PENDIENTE'}">{{ u.estado }}</span></td>
+            <td>
+              <select [(ngModel)]="u.nuevoRolSeleccionado" class="filter-select">
+                <option value="ROLE_ADMIN">ROLE_ADMIN</option>
+                <option value="ROLE_MEDICO">ROLE_MEDICO</option>
+                <option value="ROLE_RECEPCION">ROLE_RECEPCION</option>
+                <option value="ROLE_PACIENTE">ROLE_PACIENTE</option>
+              </select>
+            </td>
+            <td>
+              <button *ngIf="u.estado !== 'APROBADA'" type="button" (click)="aprobarUsuario(u.id)" class="btn-action btn-success">{{ tr('aprobar') }}</button>
+              <button *ngIf="u.estado === 'APROBADA'" type="button" (click)="rechazarUsuario(u.id)" class="btn-action btn-warning">{{ tr('suspender') }}</button>
+            </td>
+            <td>
+              <button type="button" (click)="actualizarRol(u.id, u.nuevoRolSeleccionado)" class="btn-action btn-primary">{{ tr('guardar') }}</button>
+            </td>
+          </tr>
+          <tr *ngIf="todosLosUsuariosFiltrados.length === 0">
+            <td colspan="7" class="text-center">{{ tr('noUsuarios') }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>

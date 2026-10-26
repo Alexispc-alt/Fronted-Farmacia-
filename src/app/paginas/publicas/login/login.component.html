@@ -1,0 +1,93 @@
+<div class="pro-auth-wrapper">
+  <!-- Barra de Accesibilidad superior en el Login -->
+  <div class="accessibility-bar-login">
+    <span>Accesibilidad:</span>
+    <button type="button" (click)="alternarTamanioLetra()" class="accessibility-btn" title="Alternar tamaño de fuente">
+      {{ fontSizeLarge ? 'A- Normal' : 'A+ Grande' }}
+    </button>
+    <button type="button" (click)="toggleTheme()" class="theme-toggle-btn">
+      {{ isDarkMode ? '☀️ Modo Claro' : '🌙 Modo Oscuro' }}
+    </button>
+  </div>
+
+  <div class="pro-auth-container animate-fade-in">
+    <div class="pro-auth-brand">
+      <div class="brand-content">
+        <div class="brand-icon">🏥</div>
+        <h1>Sistemas MediCore</h1>
+        <p>Plataforma integral de gestión hospitalaria y control clínico seguro.</p>
+      </div>
+    </div>
+
+    <div class="pro-auth-form-side">
+      <header class="form-header">
+        <h2>Bienvenido</h2>
+        <p class="auth-subtitle">Ingresa tus credenciales para acceder al sistema</p>
+      </header>
+
+      <nav *ngIf="modo !== 'verificacion'" class="pro-tabs">
+        <button type="button" (click)="cambiarModo('login')" [ngClass]="{'active': modo === 'login'}" class="pro-tab-btn">Iniciar Sesión</button>
+        <button type="button" (click)="cambiarModo('registro')" [ngClass]="{'active': modo === 'registro'}" class="pro-tab-btn">Registrarse</button>
+      </nav>
+
+      <div *ngIf="errorMessage" class="pro-alert pro-alert-error" role="alert">⚠️ {{ errorMessage }}</div>
+      <div *ngIf="successMessage" class="pro-alert pro-alert-success" role="alert">✔ {{ successMessage }}</div>
+
+      <!-- LOGIN -->
+      <form *ngIf="modo === 'login'" (ngSubmit)="onLogin()" class="pro-form">
+        <div class="pro-form-group">
+          <label for="emailLogin">Correo Electrónico</label>
+          <input id="emailLogin" type="email" [(ngModel)]="emailLogin" name="emailLogin" placeholder="nombre@hospital.com" required class="pro-input">
+        </div>
+        <div class="pro-form-group">
+          <label for="passwordLogin">Contraseña</label>
+          <input id="passwordLogin" type="password" [(ngModel)]="passwordLogin" name="passwordLogin" placeholder="••••••••" required class="pro-input">
+        </div>
+        <button type="submit" [disabled]="cargando" class="pro-btn-primary">
+          {{ cargando ? 'Verificando...' : 'Iniciar Sesión' }}
+        </button>
+      </form>
+
+      <!-- REGISTRO -->
+      <form *ngIf="modo === 'registro'" (ngSubmit)="onRegistrar()" class="pro-form">
+        <div class="pro-form-row">
+          <div class="pro-form-group">
+            <label for="nombre">Nombre</label>
+            <input id="nombre" type="text" [(ngModel)]="nombre" name="nombre" placeholder="Jhostin" required class="pro-input">
+          </div>
+          <div class="pro-form-group">
+            <label for="apellido">Apellido</label>
+            <input id="apellido" type="text" [(ngModel)]="apellido" name="apellido" placeholder="Calle" required class="pro-input">
+          </div>
+        </div>
+        <div class="pro-form-group">
+          <label for="emailRegistro">Correo Electrónico</label>
+          <input id="emailRegistro" type="email" [(ngModel)]="emailRegistro" name="emailRegistro" placeholder="jhostin@correo.com" required class="pro-input">
+        </div>
+        <div class="pro-form-group">
+          <label for="passwordRegistro">Contraseña</label>
+          <input id="passwordRegistro" type="password" [(ngModel)]="passwordRegistro" name="passwordRegistro" placeholder="Mínimo 6 caracteres" required class="pro-input">
+        </div>
+        <button type="submit" [disabled]="cargando" class="pro-btn-primary">
+          {{ cargando ? 'Registrando...' : 'Crear Cuenta Segura' }}
+        </button>
+      </form>
+
+      <!-- VERIFICACIÓN -->
+      <form *ngIf="modo === 'verificacion'" (ngSubmit)="onVerificarCodigo()" class="pro-form">
+        <div class="verify-box">
+          <p>Ingresa el código de 6 dígitos enviado a tu correo:</p>
+          <strong class="highlight-email">{{ emailParaVerificar }}</strong>
+        </div>
+        <div class="pro-form-group">
+          <label for="codigoVerificacion">Código de Verificación</label>
+          <input id="codigoVerificacion" type="text" [(ngModel)]="codigoVerificacion" name="codigoVerificacion" placeholder="123456" maxlength="6" required class="pro-input text-center-input">
+        </div>
+        <button type="submit" [disabled]="cargando" class="pro-btn-primary">
+          {{ cargando ? 'Validando...' : 'Confirmar Código' }}
+        </button>
+        <button type="button" (click)="cambiarModo('login')" class="pro-btn-secondary">← Volver al login</button>
+      </form>
+    </div>
+  </div>
+</div>

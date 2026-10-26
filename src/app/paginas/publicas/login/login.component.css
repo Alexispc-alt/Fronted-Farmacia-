@@ -1,0 +1,260 @@
+.pro-auth-wrapper {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #f1f5f9 0%, #cbd5e1 100%);
+  padding: 20px;
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+}
+
+.pro-auth-container {
+  display: flex;
+  background: #ffffff;
+  width: 100%;
+  max-width: 900px;
+  border-radius: 20px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+}
+
+/* Panel Izquierdo / Branding */
+.pro-auth-brand {
+  flex: 1;
+  background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+  color: white;
+  padding: 48px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.brand-icon {
+  font-size: 3rem;
+  margin-bottom: 16px;
+}
+
+.pro-auth-brand h1 {
+  font-size: 2rem;
+  font-weight: 800;
+  margin-bottom: 12px;
+  letter-spacing: -0.5px;
+}
+
+.pro-auth-brand p {
+  font-size: 0.95rem;
+  color: #93c5fd;
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+.brand-features {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 0.85rem;
+  color: #e2e8f0;
+  font-weight: 500;
+}
+
+/* Panel Derecho / Formulario */
+.pro-auth-form-side {
+  flex: 1.2;
+  padding: 48px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.form-header {
+  margin-bottom: 24px;
+}
+
+.form-header h2 {
+  font-size: 1.75rem;
+  color: #0f172a;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.auth-subtitle {
+  color: #64748b;
+  font-size: 0.9rem;
+}
+
+/* Pestañas */
+.pro-tabs {
+  display: flex;
+  background: #f1f5f9;
+  padding: 4px;
+  border-radius: 10px;
+  margin-bottom: 24px;
+}
+
+.pro-tab-btn {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  background: transparent;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #64748b;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.25s ease;
+}
+
+.pro-tab-btn.active {
+  background: #ffffff;
+  color: #2563eb;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+/* Campos y Entradas */
+.pro-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.pro-form-row {
+  display: flex;
+  gap: 12px;
+}
+
+.pro-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+
+.pro-form-group label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #334155;
+}
+
+.pro-input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  background-color: #f8fafc;
+  color: #1e293b;
+  outline: none;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.pro-input:focus {
+  border-color: #2563eb;
+  background-color: #ffffff;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+}
+
+.text-center-input {
+  text-align: center;
+  font-size: 1.5rem;
+  letter-spacing: 6px;
+  font-weight: 700;
+}
+
+/* Botones */
+.pro-btn-primary {
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  color: white;
+  padding: 14px;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: transform 0.1s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+  margin-top: 6px;
+}
+
+.pro-btn-primary:hover {
+  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35);
+  transform: translateY(-1px);
+}
+
+.pro-btn-primary:active {
+  transform: translateY(0);
+}
+
+.pro-btn-secondary {
+  background: transparent;
+  color: #64748b;
+  border: none;
+  padding: 8px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  margin-top: 4px;
+  transition: color 0.2s;
+}
+
+.pro-btn-secondary:hover {
+  color: #1e293b;
+}
+
+/* Alertas Modernas */
+.pro-alert {
+  padding: 12px 16px;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  animation: fadeIn 0.3s ease;
+}
+
+.pro-alert-error {
+  background-color: #fef2f2;
+  color: #991b1b;
+  border: 1px solid #fecaca;
+}
+
+.pro-alert-success {
+  background-color: #f0fdf4;
+  color: #166534;
+  border: 1px solid #bbf7d0;
+}
+
+.verify-box {
+  text-align: center;
+  color: #475569;
+  font-size: 0.9rem;
+  margin-bottom: 10px;
+  line-height: 1.5;
+}
+
+.highlight-email {
+  color: #2563eb;
+  font-weight: 700;
+}
+
+/* Responsivo para móviles */
+@media (max-width: 768px) {
+  .pro-auth-container {
+    flex-direction: column;
+    max-width: 450px;
+  }
+  .pro-auth-brand {
+    padding: 32px;
+  }
+  .pro-auth-form-side {
+    padding: 32px;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}

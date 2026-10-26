@@ -1,0 +1,80 @@
+<div class="dashboard-container">
+  <div class="accessibility-bar">
+    <span>⌨️ Atajos: <kbd>Alt + D</kbd> Tema | Accesibilidad:</span>
+    <div class="accessibility-controls">
+      <button type="button" (click)="alternarTamanioLetra()" class="accessibility-btn">{{ fontSizeLarge ? 'A- Normal' : 'A+ Grande' }}</button>
+      <button type="button" (click)="toggleTheme()" class="theme-toggle-btn">{{ isDarkMode ? '☀️ Modo Claro' : '🌙 Modo Oscuro' }}</button>
+    </div>
+  </div>
+
+  <header class="card-box header-panel">
+    <div>
+      <h2>Panel de Recepción - Control de Citas</h2>
+      <p class="subtitle">Gestión logística, supervisión de turnos y creación de citas</p>
+    </div>
+    <div style="display: flex; gap: 10px;">
+      <button type="button" (click)="mostrarFormularioCrear = !mostrarFormularioCrear" class="btn-action btn-primary">
+        {{ mostrarFormularioCrear ? '✖ Cancelar' : '＋ Nueva Cita' }}
+      </button>
+      <button type="button" (click)="cerrarSesion()" class="btn-action btn-danger">Cerrar Sesión</button>
+    </div>
+  </header>
+
+  <!-- Formulario de Creación de Cita con selector de fecha limpio -->
+  <section *ngIf="mostrarFormularioCrear" class="card-box animate-fade-in" style="background-color: var(--bg-main);">
+    <h3 class="section-title">Registrar Nueva Cita Médica</h3>
+    <form (ngSubmit)="crearCita()" class="crear-cita-grid">
+      <div class="form-group-recepcion">
+        <label>Fecha y Hora:</label>
+        <input type="datetime-local" [(ngModel)]="nuevaCita.fechaHora" name="fechaHora" required class="search-input">
+      </div>
+      <div class="form-group-recepcion">
+        <label>ID Paciente:</label>
+        <input type="number" [(ngModel)]="nuevaCita.pacienteId" name="pacienteId" placeholder="Ej: 5" required class="search-input">
+      </div>
+      <div class="form-group-recepcion">
+        <label>ID Médico:</label>
+        <input type="number" [(ngModel)]="nuevaCita.medicoId" name="medicoId" placeholder="Ej: 2" required class="search-input">
+      </div>
+      <div style="display: flex; align-items: flex-end;">
+        <button type="submit" class="btn-action btn-success" style="width: 100%; padding: 12px; font-weight: 700;">Guardar Cita</button>
+      </div>
+    </form>
+  </section>
+
+  <div *ngIf="errorMessage" class="alert alert-error">{{ errorMessage }}</div>
+  <div *ngIf="successMessage" class="alert alert-success">{{ successMessage }}</div>
+
+  <section class="card-box">
+    <div class="search-box-container">
+      <input type="text" [(ngModel)]="filtroRecepcion" placeholder="🔍 Buscar cita por paciente o estado..." class="search-input">
+    </div>
+
+    <h3 class="section-title">Listado General de Citas en el Sistema</h3>
+    
+    <div class="table-responsive">
+      <table class="table-custom">
+        <thead>
+          <tr><th>ID Cita</th><th>Fecha y Hora</th><th>Estado</th><th>Paciente</th><th>Acciones</th></tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let cita of citasFiltradas">
+            <td><strong>#{{ cita.id }}</strong></td>
+            <td>{{ cita.fechaHora || cita.fecha }}</td>
+            <td><span class="badge-aprobada">{{ cita.estado }}</span></td>
+            <td>{{ cita.pacienteNombre || ('ID: ' + cita.pacienteId) }}</td>
+            <td>
+              <div class="action-buttons">
+                <button type="button" (click)="cambiarEstado(cita.id, 'CONFIRMADA')" class="btn-action btn-primary">Confirmar</button>
+                <button type="button" (click)="cambiarEstado(cita.id, 'CANCELADA')" class="btn-action btn-danger">Cancelar</button>
+              </div>
+            </td>
+          </tr>
+          <tr *ngIf="citasFiltradas.length === 0">
+            <td colspan="5" class="text-center">No se encontraron citas registradas.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>
